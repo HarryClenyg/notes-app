@@ -2,10 +2,15 @@ console.log('The notes app is running')
 
 const NotesModel = require('./notesModel')
 const NotesView = require('./notesView')
+const NotesApi = require('./notesApi')
 
-const notes_model = new NotesModel
-const view = new NotesView(notes_model)
+const model = new NotesModel
+const view = new NotesView(model)
+const api = new NotesApi
 
-notes_model.getNotes().forEach(note => console.log(`${note}`))
-
-view.displayNotes()
+api.loadNotes((notes) => {
+  model.setNotes(notes);
+  view.displayNotes();
+}, () => {
+  view.displayError();
+});
